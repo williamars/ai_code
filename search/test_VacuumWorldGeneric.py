@@ -2,9 +2,11 @@ from SearchAlgorithms import BuscaLargura
 from SearchAlgorithms import BuscaProfundidade
 from SearchAlgorithms import BuscaProfundidadeIterativa
 from VacuumWorldGeneric import *
+import sys
+sys.path.append('search')
 
 def test_largura_simple_0():
-    file_map_path = './data/vacuum_simple_0.txt'
+    file_map_path = 'data/vacuum_simple_0.txt'
     lin = 0
     col = 0
     mapa = convert_file_to_map(file_map_path)
@@ -40,4 +42,4 @@ def test_largura_simple_2():
     algorithm = BuscaLargura()
     result = algorithm.search(state)
     print(f'Solução = {result.show_path()}')
-    assert result.show_path() == " ; limpar"
+    assert result.show_path() == " ; dir ; dir ; baixo ; limpar"
