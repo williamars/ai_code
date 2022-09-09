@@ -1,21 +1,21 @@
 from aicode.search.SearchAlgorithms import BuscaCustoUniforme, BuscaLargura, BuscaProfundidadeIterativa
 from aicode.search.Graph import State
-import sys
-
 
 class Map(State):
 
-    def __init__(self, actual, objective, op):
+    def __init__(self, before, actual, objective, op):
+        self.before = before
         self.actual = actual
         self.objective = objective
         self.operator = op
-        self.area = Map.createArea()
+        self.area = self.createArea()
     
     def sucessors(self):
         sucessors = []
 
-
-        #TODO
+        for pos in self.area[self.actual]:
+            sucessors.append(Map(before=self.actual, actual=pos[1], objective=self.objective, op=f"to {pos[1]}"))
+        
         return sucessors
     
     def is_goal(self):
@@ -25,17 +25,16 @@ class Map(State):
         return "Describe the problem"
     
     def cost(self):
-        return 1
+        for way in self.area[self.before]:
+            if way[1] == self.actual:
+                return way[0]
+        return 0
 
     def print(self):
-        #
-        # Usado para imprimir a solução encontrada. 
-        # O PATH do estado inicial até o final.
         return str(self.operator)
 
-    @staticmethod
-    def createArea():
-        Map.area = {
+    def createArea(self):
+        return {
             'a':[(3,'b'),(6,'c')],
             'b':[(3,'a'),(3,'h'),(3,'k')],
             'c':[(6,'a'),(2,'g'),(3,'d'),(2,'o'),(2,'p')],
@@ -52,31 +51,17 @@ class Map(State):
             'o':[(2,'c')],
             'p':[(2,'c')],
             'x':[(1,'m')]
-            }
+        }
     
     def env(self):
-        #
-        # IMPORTANTE: este método não deve apenas retornar uma descrição do environment, mas 
-        # deve também retornar um valor que descreva aquele nodo em específico. Pois 
-        # esta representação é utilizada para verificar se um nodo deve ou ser adicionado 
-        # na lista de abertos.
-        #
-        # Exemplos de especificações adequadas: 
-        # - para o problema do soma 1 e 2: return str(self.number)+"#"+str(self.cost)
-        # - para o problema das cidades: return self.city+"#"+str(self.cost())
-        #
-        # Exemplos de especificações NÃO adequadas: 
-        # - para o problema do soma 1 e 2: return str(self.number)
-        # - para o problema das cidades: return self.city
-        #
-        None
+        return str(self.before) + ";" + str(self.actual)
 
 
-def main(first_city, second_city):
-
-    
+def main():
+    initial_city = "p"
+    final_city = "x"    
     print('Busca de Custo Uniforme')
-    state = Map('')
+    state = Map(before="", actual=initial_city, objective=final_city, op="")
     algorithm = BuscaCustoUniforme()
     result = algorithm.search(state)
     if result != None:
@@ -86,7 +71,7 @@ def main(first_city, second_city):
         print('Nao achou solucao')
     
     print('Busca em Largura')
-    state = Map('')
+    state = Map(before="", actual=initial_city, objective=final_city, op="")
     algorithm = BuscaLargura()
     result = algorithm.search(state)
     if result != None:
@@ -96,7 +81,33 @@ def main(first_city, second_city):
         print('Nao achou solucao')
 
 if __name__ == '__main__':
-    first_city = sys.argv[1]
-    second_city = sys.argv[2]
+    main()
 
-    main(first_city, second_city)
+'''
+Implementações
+Implemente um agente, usando o algoritmo de busca em largura, para encontrar um caminho entre a cidade i e o.
+
+Perguntas:
+
+Qual foi o tempo de processamento até a implementação encontrar uma solução?
+A árvore de busca gerada é "inteligente"?
+A solução encontrada é ótima?
+Usando a mesma implementação, encontre um caminho entre a cidade b e o.
+
+Perguntas:
+
+Qual foi o tempo de processamento até a implementação encontrar uma solução?
+A árvore de busca gerada é "inteligente"?
+A solução encontrada é ótima?
+Usando o algoritmo de custo uniforme
+Utilize o algoritmo de custo uniforme para encontrar uma solução para os problemas abaixo:
+
+da cidade i para a cidade o
+da cidade b para a cidade o
+da cidade i para a cidade x
+Perguntas:
+
+Qual foi o tempo de processamento até a implementação encontrar uma solução?
+A árvore de busca gerada é "inteligente"?
+A solução encontrada é ótima?
+'''
