@@ -6,10 +6,10 @@ import csv
 
 class Map(State):
 
-    def __init__(self, before, actual, objective, op):
-        self.before = before
+    def __init__(self, actual, objective, custo, op):
         self.actual = actual
         self.objective = objective
+        self.custo = custo
         self.operator = op
         self.area = self.createArea()
     
@@ -17,8 +17,8 @@ class Map(State):
         sucessors = []
 
         for pos in self.area[self.actual]:
-            sucessors.append(Map(before=self.actual, actual=pos[1], objective=self.objective, op=f"to {pos[1]}"))
-        
+            sucessors.append(Map(actual=pos[1], objective=self.objective, custo=pos[0], op=f"to {pos[1]}"))
+
         return sucessors
     
     def is_goal(self):
@@ -27,26 +27,14 @@ class Map(State):
     def description(self):
         return "Describe the problem"
     
+    def h(self):
+        return int(Map.g[self.actual][self.objective]["distance"])
+
     def cost(self):
-        for way in self.area[self.before]:
-            if way[1] == self.actual:
-                return way[0]
-        return 0
+        return self.custo
 
     def print(self):
         return str(self.operator)
-
-    @staticmethod
-    def createHeuristics():
-        #
-        # O arquvo MapHeuristics.csv considera apenas os objetivos "o" e "x"
-        # TODO modificar o arquivo para considerar todas as cidades. talvez modificar
-        # a estrutura do arquivo considerando uma estrutura otimizada
-        #
-        Map.g = nx.Graph()
-        f = csv.reader(open("data/MapHeuristics.csv","r"))
-        for row in f: 
-            Map.g.add_edge(row[0],row[1], distance = row[2])
 
     def createArea(self):
         return {
@@ -68,38 +56,53 @@ class Map(State):
             'x':[(1,'m')]
         }
     
+
     def env(self):
-        return str(self.before) + ";" + str(self.actual)
+        return str(self.actual)
 
+    @staticmethod
+    def createHeuristics():
+        #
+        # O arquvo MapHeuristics.csv considera apenas os objetivos "o" e "x"
+        # TODO modificar o arquivo para considerar todas as cidades. talvez modificar
+        # a estrutura do arquivo considerando uma estrutura otimizada
+        #
+        Map.g = nx.Graph()
+        f = csv.reader(open("src/data/MapHeuristics.csv","r"))
+        for row in f: 
+            Map.g.add_edge(row[0],row[1], distance = row[2])
+
+   
 def main():
-    initial_city = "p"
+    initial_city = "i"
     final_city = "x"    
-    print('Busca de Custo Uniforme')
-    state = Map(before="", actual=initial_city, objective=final_city, op="")
-    algorithm = BuscaCustoUniforme()
-    result = algorithm.search(state)
-    if result != None:
-        print('Achou!')
-        print(result.show_path())
-    else:
-        print('Nao achou solucao')
-
-    # Map.createArea()
-    # Map.createHeuristics()
-
-    # print('Busca por algoritmo A*: sair de p e chegar em n')
-    # state = Map('i', 0, 'i', 'x')
-    # algorithm = AEstrela()
-    # ts = time.time()
+    # print('Busca de Custo Uniforme')
+    # state = Map(actual=initial_city, objective=final_city, custo=0, op="")
+    # algorithm = BuscaCustoUniforme()
     # result = algorithm.search(state)
-    # tf = time.time()
     # if result != None:
+    #     print('Achou!')
     #     print(result.show_path())
     # else:
     #     print('Nao achou solucao')
-    # print('Tempo de processamento em segundos: ' + str(tf-ts))
-    # print('O custo da solucao eh: '+str(result.g))
-    # print('')
+
+    
+    # Map.createArea()
+    Map.createHeuristics()
+
+    print('Busca por algoritmo A*: sair de p e chegar em n')
+    state = Map(actual=initial_city, objective=final_city, custo=0, op='')
+    algorithm = AEstrela()
+    ts = time.time()
+    result = algorithm.search(state)
+    tf = time.time()
+    if result != None:
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+    print('Tempo de processamento em segundos: ' + str(tf-ts))
+    print('O custo da solucao eh: '+str(result.g))
+    print('')
     
 if __name__ == '__main__':
     main()
