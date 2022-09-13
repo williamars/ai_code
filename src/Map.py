@@ -11,12 +11,11 @@ class Map(State):
         self.objective = objective
         self.custo = custo
         self.operator = op
-        self.area = self.createArea()
     
     def sucessors(self):
         sucessors = []
 
-        for pos in self.area[self.actual]:
+        for pos in Map.area[self.actual]:
             sucessors.append(Map(actual=pos[1], objective=self.objective, custo=pos[0], op=f"to {pos[1]}"))
 
         return sucessors
@@ -36,8 +35,9 @@ class Map(State):
     def print(self):
         return str(self.operator)
 
-    def createArea(self):
-        return {
+    @staticmethod
+    def createArea():
+        Map.area = {
             'a':[(3,'b'),(6,'c')],
             'b':[(3,'a'),(3,'h'),(3,'k')],
             'c':[(6,'a'),(2,'g'),(3,'d'),(2,'o'),(2,'p')],
@@ -70,7 +70,7 @@ class Map(State):
         Map.g = nx.Graph()
         f = csv.reader(open("src/data/MapHeuristics.csv","r"))
         for row in f: 
-            Map.g.add_edge(row[0],row[1], distance = row[2])
+            Map.g.add_edge(row[0], row[1], distance = row[2])
 
    
 def main():
@@ -87,7 +87,7 @@ def main():
     #     print('Nao achou solucao')
 
     
-    # Map.createArea()
+    Map.createArea()
     Map.createHeuristics()
 
     print('Busca por algoritmo A*: sair de p e chegar em n')
