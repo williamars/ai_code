@@ -1,11 +1,10 @@
-from aicode.search.SearchAlgorithms import AEstrela, BuscaCustoUniforme, BuscaLargura, BuscaProfundidadeIterativa
+from aicode.search.SearchAlgorithms import AEstrela, BuscaCustoUniforme, BuscaGananciosa, BuscaLargura, BuscaProfundidadeIterativa
 from aicode.search.Graph import State
 import time
 import networkx as nx
 import csv
 
 class Map(State):
-
     def __init__(self, actual, objective, custo, op):
         self.actual = actual
         self.objective = objective
@@ -15,8 +14,10 @@ class Map(State):
     def sucessors(self):
         sucessors = []
 
-        for pos in Map.area[self.actual]:
-            sucessors.append(Map(actual=pos[1], objective=self.objective, custo=pos[0], op=f"to {pos[1]}"))
+        for possibilitie in Map.area[self.actual]:
+            custo = possibilitie[0]
+            city = possibilitie[1]
+            sucessors.append(Map(actual=city, objective=self.objective, custo=custo, op=f"to {city}"))
 
         return sucessors
     
@@ -24,10 +25,13 @@ class Map(State):
         return (self.actual == self.objective)
     
     def description(self):
-        return "Describe the problem"
+        return "City Problem"
     
     def h(self):
         return int(Map.g[self.actual][self.objective]["distance"])
+        # return 0
+        # return 1
+        # print(int(Map.g[self.actual][self.objective]["distance"]))
 
     def cost(self):
         return self.custo
@@ -70,12 +74,14 @@ class Map(State):
         Map.g = nx.Graph()
         f = csv.reader(open("src/data/MapHeuristics.csv","r"))
         for row in f: 
+            print(row)
             Map.g.add_edge(row[0], row[1], distance = row[2])
 
    
 def main():
     initial_city = "i"
     final_city = "x"    
+    # Map.createArea()
     # print('Busca de Custo Uniforme')
     # state = Map(actual=initial_city, objective=final_city, custo=0, op="")
     # algorithm = BuscaCustoUniforme()
@@ -90,9 +96,26 @@ def main():
     Map.createArea()
     Map.createHeuristics()
 
-    print('Busca por algoritmo A*: sair de p e chegar em n')
+    print('Busca por algoritmo A*: sair de i e chegar em x')
     state = Map(actual=initial_city, objective=final_city, custo=0, op='')
     algorithm = AEstrela()
+    ts = time.time()
+    result = algorithm.search(state)
+    tf = time.time()
+    if result != None:
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+    print('Tempo de processamento em segundos: ' + str(tf-ts))
+    print('O custo da solucao eh: '+str(result.g))
+    print('')
+   
+    Map.createArea()
+    Map.createHeuristics()
+
+    print('Busca Gananciosa')
+    state = Map(actual=initial_city, objective=final_city, custo=0, op='')
+    algorithm = BuscaGananciosa()
     ts = time.time()
     result = algorithm.search(state)
     tf = time.time()
