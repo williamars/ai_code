@@ -1,5 +1,8 @@
-from aicode.search.SearchAlgorithms import BuscaCustoUniforme, BuscaLargura, BuscaProfundidadeIterativa
+from aicode.search.SearchAlgorithms import AEstrela, BuscaCustoUniforme, BuscaLargura, BuscaProfundidadeIterativa
 from aicode.search.Graph import State
+import time
+import networkx as nx
+import csv
 
 class Map(State):
 
@@ -33,6 +36,18 @@ class Map(State):
     def print(self):
         return str(self.operator)
 
+    @staticmethod
+    def createHeuristics():
+        #
+        # O arquvo MapHeuristics.csv considera apenas os objetivos "o" e "x"
+        # TODO modificar o arquivo para considerar todas as cidades. talvez modificar
+        # a estrutura do arquivo considerando uma estrutura otimizada
+        #
+        Map.g = nx.Graph()
+        f = csv.reader(open("data/MapHeuristics.csv","r"))
+        for row in f: 
+            Map.g.add_edge(row[0],row[1], distance = row[2])
+
     def createArea(self):
         return {
             'a':[(3,'b'),(6,'c')],
@@ -56,7 +71,6 @@ class Map(State):
     def env(self):
         return str(self.before) + ";" + str(self.actual)
 
-
 def main():
     initial_city = "p"
     final_city = "x"    
@@ -69,17 +83,24 @@ def main():
         print(result.show_path())
     else:
         print('Nao achou solucao')
-    
-    print('Busca em Largura')
-    state = Map(before="", actual=initial_city, objective=final_city, op="")
-    algorithm = BuscaLargura()
-    result = algorithm.search(state)
-    if result != None:
-        print('Achou!')
-        print(result.show_path())
-    else:
-        print('Nao achou solucao')
 
+    # Map.createArea()
+    # Map.createHeuristics()
+
+    # print('Busca por algoritmo A*: sair de p e chegar em n')
+    # state = Map('i', 0, 'i', 'x')
+    # algorithm = AEstrela()
+    # ts = time.time()
+    # result = algorithm.search(state)
+    # tf = time.time()
+    # if result != None:
+    #     print(result.show_path())
+    # else:
+    #     print('Nao achou solucao')
+    # print('Tempo de processamento em segundos: ' + str(tf-ts))
+    # print('O custo da solucao eh: '+str(result.g))
+    # print('')
+    
 if __name__ == '__main__':
     main()
 
