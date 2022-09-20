@@ -1,4 +1,8 @@
-from aicode.search.SearchAlgorithms import AEstrela, BuscaCustoUniforme, BuscaGananciosa, BuscaLargura, BuscaProfundidadeIterativa
+
+from aicode.search.SearchAlgorithms import BuscaProfundidadeIterativa
+from aicode.search.SearchAlgorithms import BuscaCustoUniforme
+from aicode.search.SearchAlgorithms import BuscaGananciosa
+from aicode.search.SearchAlgorithms import AEstrela
 from aicode.search.Graph import State
 import time
 import networkx as nx
@@ -35,10 +39,20 @@ class Map(State):
         # print(int(Map.g[self.actual][self.objective]["distance"]))
 
     def cost(self):
-        return self.custo
-
+        #return the cost to get at city "city"
+        return self.cost_value
+    
     def print(self):
         return str(self.operator)
+    
+    def env(self):
+        return self.city
+        #return self.city+"#"+str(self.cost())
+
+    def h(self):
+        return int(Map.g.edges[self.city,self.goal]['distance'])
+        #return random.randint(1,10)
+        #return 1
 
     @staticmethod
     def createArea():
@@ -99,6 +113,7 @@ def main():
     print('Busca por algoritmo A*: sair de i e chegar em x')
     state = Map(actual=initial_city, objective=final_city, custo=0, op='')
     algorithm = AEstrela()
+    #algorithm = BuscaCustoUniforme()
     ts = time.time()
     result = algorithm.search(state)
     tf = time.time()
