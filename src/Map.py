@@ -1,4 +1,3 @@
-
 from aicode.search.SearchAlgorithms import BuscaProfundidadeIterativa
 from aicode.search.SearchAlgorithms import BuscaCustoUniforme
 from aicode.search.SearchAlgorithms import BuscaGananciosa
@@ -9,35 +8,42 @@ import networkx as nx
 import csv
 
 class Map(State):
-    def __init__(self, actual, objective, custo, op):
-        self.actual = actual
-        self.objective = objective
-        self.custo = custo
+
+    def __init__(self, city, cost, op, goal):
+        self.city = city
+        self.cost_value = cost
         self.operator = op
+        self.goal = goal
     
     def sucessors(self):
         sucessors = []
-
-        for possibilitie in Map.area[self.actual]:
-            custo = possibilitie[0]
-            city = possibilitie[1]
-            sucessors.append(Map(actual=city, objective=self.objective, custo=custo, op=f"to {city}"))
-
+        neighbors = Map.area[self.city]
+        for next_city in neighbors:
+            sucessors.append(Map(next_city[1], next_city[0], next_city[1], self.goal))
         return sucessors
+
+    # def __init__(self, actual, objective, custo, op):
+    #     self.actual = actual
+    #     self.objective = objective
+    #     self.custo = custo
+    #     self.operator = op
+    
+    # def sucessors(self):
+    #     sucessors = []
+
+    #     for possibilitie in Map.area[self.actual]:
+    #         custo = possibilitie[0]
+    #         city = possibilitie[1]
+    #         sucessors.append(Map(actual=city, objective=self.objective, custo=custo, op=f"to {city}"))
+
+    #     return sucessors
     
     def is_goal(self):
-        return (self.actual == self.objective)
+        return (self.city == self.goal)
     
     def description(self):
-        return "City Problem"
+        return "The map of cities with road distances"
     
-    def h(self):
-        return int(Map.g.edges[self.actual, self.objective]['distance'])
-        # return int(Map.g[self.actual][self.objective]["distance"])
-        # return 0
-        # return 1
-        # print(int(Map.g[self.actual][self.objective]["distance"]))
-
     def cost(self):
         #return the cost to get at city "city"
         return self.cost_value
@@ -50,12 +56,17 @@ class Map(State):
         #return self.city+"#"+str(self.cost())
 
     def h(self):
-        return int(Map.g.edges[self.city,self.goal]['distance'])
+        return int(Map.g.edges[self.city,self.goal]['distance']) * 1000
+        # return int(Map.g.edges[self.city,self.goal]['distance'])
         #return random.randint(1,10)
         #return 1
 
     @staticmethod
     def createArea():
+        #
+        # TODO mover a definicao do mapa de uma forma hard-coded para para leitura
+        # a partir de um arquivo, similar ao que é feito no metodo createHeuristics()
+        # 
         Map.area = {
             'a':[(3,'b'),(6,'c')],
             'b':[(3,'a'),(3,'h'),(3,'k')],
@@ -73,11 +84,7 @@ class Map(State):
             'o':[(2,'c')],
             'p':[(2,'c')],
             'x':[(1,'m')]
-        }
-    
-
-    def env(self):
-        return str(self.actual)
+            }
 
     @staticmethod
     def createHeuristics():
@@ -87,31 +94,18 @@ class Map(State):
         # a estrutura do arquivo considerando uma estrutura otimizada
         #
         Map.g = nx.Graph()
-        f = csv.reader(open("src/data/MapHeuristics.csv","r"))
-        for row in f:
-            Map.g.add_edge(row[0], row[1], distance = row[2])
+        f = csv.reader(open("data/MapHeuristics.csv","r"))
+        for row in f: 
+            Map.g.add_edge(row[0],row[1], distance = row[2])
 
-   
+
 def main():
-    initial_city = "i"
-    final_city = "x"    
-    # Map.createArea()
-    # print('Busca de Custo Uniforme')
-    # state = Map(actual=initial_city, objective=final_city, custo=0, op="")
-    # algorithm = BuscaCustoUniforme()
-    # result = algorithm.search(state)
-    # if result != None:
-    #     print('Achou!')
-    #     print(result.show_path())
-    # else:
-    #     print('Nao achou solucao')
 
-    
     Map.createArea()
     Map.createHeuristics()
 
-    print('Busca por algoritmo A*: sair de i e chegar em x')
-    state = Map(actual=initial_city, objective=final_city, custo=0, op='')
+    print('Busca por algoritmo A*')
+    state = Map('i', 0, 'i', 'x')
     algorithm = AEstrela()
     #algorithm = BuscaCustoUniforme()
     ts = time.time()
@@ -127,9 +121,9 @@ def main():
    
     Map.createArea()
     Map.createHeuristics()
-
-    print('Busca Gananciosa')
-    state = Map(actual=initial_city, objective=final_city, custo=0, op='')
+    print('Busca por algoritmo Busca Gananciosa')
+    state = Map('i', 0, 'i', 'x')
+    # algorithm = AEstrela()
     algorithm = BuscaGananciosa()
     ts = time.time()
     result = algorithm.search(state)
@@ -142,8 +136,25 @@ def main():
     print('O custo da solucao eh: '+str(result.g))
     print('')
     
+
 if __name__ == '__main__':
     main()
+
+
+'''
+1. Altere o algoritmo de busca que deve ser utilizado. Troque o algoritmo AEstrela 
+pelo BuscaGananciosa. A solução retornada continua sendo ótima? Explique o comportamento da solução.
+
+- Busca Gananciosa não olha o custo
+- A* usa heurística e o custo
+Por isso a diferença. Se envolve custo, não utilizar a Busca Gananciosa
+
+2. Porque a heurística ficou não-admissível. O algoritmo A* só é ótimo quando h(n) <= custo(n).
+Ou seja admissível.
+
+
+
+'''
 
 '''
 Implementações
@@ -163,10 +174,10 @@ A árvore de busca gerada é "inteligente"?
 A solução encontrada é ótima?
 Usando o algoritmo de custo uniforme
 Utilize o algoritmo de custo uniforme para encontrar uma solução para os problemas abaixo:
-
 da cidade i para a cidade o
 da cidade b para a cidade o
 da cidade i para a cidade x
+
 Perguntas:
 
 Qual foi o tempo de processamento até a implementação encontrar uma solução?

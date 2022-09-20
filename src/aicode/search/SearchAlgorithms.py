@@ -84,7 +84,7 @@ class BuscaCustoUniforme (SearchAlgorithm):
             #list sorted by g()
             open.sort(key = sortFunction, reverse = True)
             n = open.pop()[0]
-            print(n.state.env())
+            # print(n.state.env())
             if (n.state.is_goal()):
                 return n
             for i in n.state.sucessors():
@@ -134,14 +134,14 @@ class AEstrela (SearchAlgorithm):
                 new_n = Node(i,n)
                 # eh necessario descrever o conteudo do estado
                 # para verificar se ele já foi instanciado ou nao
-                #if (new_n.state.env() not in states):
-                open.append((new_n,new_n.f()))
+                if (new_n.state.env() not in states):
+                    open.append((new_n,new_n.f()))
                     # nao eh adiciona o estado ao vetor.
                     # eh adicionado o conteudo
-                #states.append(new_n.state.env())
-                #logging.debug(len(states))
-                #else: 
-                #    logging.debug('nao entrou')
+                    states.append(new_n.state.env())
+                    logging.debug(len(states))
+                else: 
+                    logging.debug('nao entrou')
         return None
 
 class SubidaMontanha (SearchAlgorithm):

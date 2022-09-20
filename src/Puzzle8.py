@@ -1,7 +1,7 @@
-from unittest import result
 from aicode.search.SearchAlgorithms import AEstrela
 from aicode.search.Graph import State
 import math
+import time
 
 class Puzzle8(State):
 
@@ -77,8 +77,10 @@ class Puzzle8(State):
         return str(self.tabuleiro)
 
     def h(self):
-        return self.h1()
-        #return self.h2()
+        # return self.h1()
+        # return self.h2()
+        # return self.h2() * self.h1()
+        return self.h2() + self.h1()
 
     #
     # quantidade de pecas fora do lugar
@@ -160,7 +162,22 @@ def main():
     tabuleiro_impossivel2 = [[5,4,0],[6,1,8],[7,3,2]]
 
     state = Puzzle8(tabuleiro_dificil3,'')
+    ts = time.time()
     print(state.show_path())
+    tf = time.time()
+    print('Tempo de processamento em segundos: ' + str(tf-ts))
+    print('')
 
 if __name__ == '__main__':
     main()
+
+
+'''
+- h2 é muito mais rápido no tempo de processamento
+* A segunda heurística distribui melhor: ela dá pesos diferentes pra estados diferentes, o h1 as
+veze da mesmo peso 
+
+- combinar as duas heurísticas: ganho?
+
+
+'''
