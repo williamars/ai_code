@@ -28,7 +28,8 @@ class Map(State):
         return "City Problem"
     
     def h(self):
-        return int(Map.g[self.actual][self.objective]["distance"])
+        return int(Map.g.edges[self.actual, self.objective]['distance'])
+        # return int(Map.g[self.actual][self.objective]["distance"])
         # return 0
         # return 1
         # print(int(Map.g[self.actual][self.objective]["distance"]))
@@ -73,8 +74,7 @@ class Map(State):
         #
         Map.g = nx.Graph()
         f = csv.reader(open("src/data/MapHeuristics.csv","r"))
-        for row in f: 
-            print(row)
+        for row in f:
             Map.g.add_edge(row[0], row[1], distance = row[2])
 
    
