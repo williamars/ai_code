@@ -37,7 +37,7 @@ Ao executar o comando acima, o programa deverá gerar uma sequência de ações 
 Uma sequência de ações válidas para resolver o estado acima é: 
 
 ```
-esq; limpar; esq; limpar; esq; baixo; baixo; limpar; dir; limpar; dir; limpar; dir; limpar
+dir; limpar; dir; limpar; dir; baixo; baixo; limpar; esq; limpar; esq; limpar; esq; limpar
 ```
 
 # Um outro exemplo 
