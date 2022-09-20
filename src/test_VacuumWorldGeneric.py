@@ -287,6 +287,3 @@ def test_BPI_simple_5():
     print(f'Solução = {result.show_path()}')
     print('\n')
     assert result.g == 15
-    
-    
-test_profundidade_x()
