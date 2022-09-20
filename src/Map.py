@@ -1,3 +1,5 @@
+from aicode.search.SearchAlgorithms import BuscaProfundidadeIterativa
+from aicode.search.SearchAlgorithms import BuscaCustoUniforme
 from aicode.search.SearchAlgorithms import BuscaGananciosa
 from aicode.search.SearchAlgorithms import AEstrela
 from aicode.search.Graph import State
@@ -7,13 +9,18 @@ import csv
 
 class Map(State):
 
-    def __init__(self):
-        #TODO
-        pass
+    def __init__(self, city, cost, op, goal):
+        self.city = city
+        self.cost_value = cost
+        self.operator = op
+        self.goal = goal
     
     def sucessors(self):
-        #TODO
-        pass
+        sucessors = []
+        neighbors = Map.area[self.city]
+        for next_city in neighbors:
+            sucessors.append(Map(next_city[1], next_city[0], next_city[1], self.goal))
+        return sucessors
     
     def is_goal(self):
         return (self.city == self.goal)
@@ -22,19 +29,20 @@ class Map(State):
         return "The map of cities with road distances"
     
     def cost(self):
-        #TODO
-        return 0
+        #return the cost to get at city "city"
+        return self.cost_value
     
     def print(self):
         return str(self.operator)
     
     def env(self):
-        #TODO
-        return None
+        return self.city
+        #return self.city+"#"+str(self.cost())
 
     def h(self):
-        #TODO
-        return 1
+        return int(Map.g.edges[self.city,self.goal]['distance'])
+        #return random.randint(1,10)
+        #return 1
 
     @staticmethod
     def createArea():
@@ -82,6 +90,7 @@ def main():
     print('Busca por algoritmo A*: sair de p e chegar em n')
     state = Map('i', 0, 'i', 'x')
     algorithm = AEstrela()
+    #algorithm = BuscaCustoUniforme()
     ts = time.time()
     result = algorithm.search(state)
     tf = time.time()
