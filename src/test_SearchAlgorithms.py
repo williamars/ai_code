@@ -7,7 +7,7 @@ from VacuumWorld import *
 
 # teste para BuscaLargura
 def testeBuscaLargura():
-    state = VacuumWorld('right', False, False, '')
+    state = VacuumWorld('right', False, True, '')
     algorithm = BuscaLargura()
     result = algorithm.search(state)
     if result != None:
@@ -15,25 +15,26 @@ def testeBuscaLargura():
         print(result.show_path())
     else:
         print('Nao achou solucao')
-    assert result.g != None
+    assert result.g != None and result.g == 2
     print(result.show_path())
 
 # teste para BuscaProfundidade
 def testeBuscaProfundidade():
-    state = VacuumWorld('right', False, False, '')
+    state = VacuumWorld('right', True, False, '')
     algorithm = BuscaProfundidade()
-    result = algorithm.search(state, 10)
+    result = algorithm.search(state, 300)
+    print(result.g)
     if result != None:
         print('Achou!')
         print(result.show_path())
     else:
         print('Nao achou solucao')
-    assert result.g != None
+    assert result.g != None and result.g == 300
     print(result.show_path())
 
 # teste para BuscaProfundidadeIterativa
 def testeBuscaProfundidadeIterativa():
-    state = VacuumWorld('right', False, False, '')
+    state = VacuumWorld('left', True, False, '')
     algorithm = BuscaProfundidadeIterativa()
     result = algorithm.search(state)
     if result != None:
@@ -41,21 +42,9 @@ def testeBuscaProfundidadeIterativa():
         print(result.show_path())
     else:
         print('Nao achou solucao')
-    assert result.g != None
+    assert result.g != None and result.g == 3
     print(result.show_path())
 
-# teste para CustoUniforme
-def testeCustoUniforme():
-    state = VacuumWorld('right', False, False, '')
-    algorithm = BuscaCustoUniforme()
-    result = algorithm.search(state)
-    if result != None:
-        print('Achou!')
-        print(result.show_path())
-    else:
-        print('Nao achou solucao')
-    assert result.g != None
-    print(result.show_path())
 
 
 
