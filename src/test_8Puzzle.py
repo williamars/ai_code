@@ -7,8 +7,7 @@ tabuleiro_dificil1 = [[7,8,6],[2,3,5],[1,4,0]]
 tabuleiro_dificil2 = [[7,8,6],[2,3,5],[0,1,4]]
 tabuleiro_impossivel1 = [[3,4,8],[1,2,5],[7,0,6]]
 tabuleiro_impossivel2 = [[5,4,0],[6,1,8],[7,3,2]]
-
-tabuleiro_invertido = [[5,6,7],[4,0,8],[3,2,1]]
+tabuleiro_invertido = [[8,7,6],[5,0,4],[3,2,1]]
 
 def test_facil():
     print('facil')    
@@ -71,6 +70,5 @@ def test_tabuleiro_invertido():
     r = state.show_path()
     fim = datetime.now()
     print(fim - inicio)
-    print(r)
-    assert r == " ; cima ; cima ; direita ; baixo ; esquerda ; baixo ; direita ; cima ; direita ; cima ; esquerda ; esquerda ; baixo ; baixo ; direita ; cima ; direita ; baixo ; esquerda ; cima ; cima ; esquerda ; baixo ; direita"
+    assert r.count(";") <= 25
 
