@@ -181,11 +181,12 @@ def test_profundidade_simple_5():
     print('\n')
     #assert result.g == 25
 
-def test_profundidade_x():
-    print('\n#### profundidade 3x3 em X ####')
-    file_map_path = 'data/vacuum_simple_x.txt'
-    lin = 1
-    col = 1
+
+def test_profundidade_xadrez():
+    print('\n#### profundidade Xadrez ####')
+    file_map_path = 'data/vacuum_xadrez.txt'
+    lin = 0
+    col = 0
     mapa = convert_file_to_map(file_map_path)
     print(mapa)
     state = VacuumWorldGeneric(mapa, lin, col, '')
@@ -196,6 +197,21 @@ def test_profundidade_x():
     print(f"G = {result.g}")
     print('\n')
     assert result.g == 25
+
+def test_profundidade_corners():
+    print('\n#### profundidade Corners ####')
+    file_map_path = 'data/vacuum_corners.txt'
+    lin = 1
+    col = 2
+    mapa = convert_file_to_map(file_map_path)
+    print(mapa)
+    state = VacuumWorldGeneric(mapa, lin, col, '')
+    algorithm = BuscaProfundidade()
+    print('Se prepara que este vai demorar! Vale a pena monitorar o consumo de memória!!!')
+    result = algorithm.search(state, 15)
+    print(f'Solução = {result.show_path()}')
+    print('\n')
+    assert result.g == 15
 
 
 #
