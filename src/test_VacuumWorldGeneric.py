@@ -181,6 +181,7 @@ def test_profundidade_simple_5():
     print('\n')
     #assert result.g == 25
 
+
 def test_profundidade_xadrez():
     print('\n#### profundidade Xadrez ####')
     file_map_path = 'data/vacuum_xadrez.txt'
@@ -193,6 +194,7 @@ def test_profundidade_xadrez():
     print('Se prepara que este vai demorar! Vale a pena monitorar o consumo de memória!!!')
     result = algorithm.search(state, 25)
     print(f'Solução = {result.show_path()}')
+    print(f"G = {result.g}")
     print('\n')
     assert result.g == 25
 
@@ -210,6 +212,7 @@ def test_profundidade_corners():
     print(f'Solução = {result.show_path()}')
     print('\n')
     assert result.g == 15
+
 
 #
 # BPI

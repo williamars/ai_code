@@ -25,8 +25,8 @@ def test_dificil0():
     r = state.show_path()
     fim = datetime.now()
     print(fim - inicio)
-    assert r == " ; cima ; cima ; esquerda ; baixo ; esquerda ; baixo ; direita ; cima ; cima ; esquerda ; baixo ; baixo ; direita ; cima ; direita ; baixo ; esquerda ; cima ; cima ; esquerda ; baixo ; direita"
-
+    assert r == " ; cima ; esquerda ; esquerda ; baixo ; direita ; cima ; direita ; cima ; esquerda ; esquerda ; baixo ; baixo ; direita ; cima ; direita ; baixo ; esquerda ; cima ; cima ; esquerda ; baixo ; direita"
+                
 def test_dificil1():
     print('dificil 1')
     inicio = datetime.now()
@@ -71,4 +71,5 @@ def test_tabuleiro_invertido():
     fim = datetime.now()
     print(fim - inicio)
     assert r.count(";") <= 25
+
 
