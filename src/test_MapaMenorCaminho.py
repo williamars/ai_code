@@ -1,4 +1,3 @@
-from unittest import result
 from Map import *
 from aicode.search.SearchAlgorithms import AEstrela
 import time
