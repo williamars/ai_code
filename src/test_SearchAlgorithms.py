@@ -2,11 +2,34 @@ from aicode.search.SearchAlgorithms import *
 from aicode.search.Graph import Node
 from VacuumWorld import *
 from U2 import U2
-
 from collections import deque
-
 import logging
 logging.basicConfig(filename='search_algorithms.log', level=logging.DEBUG)
+from aicode.search.SearchAlgorithms import BuscaLargura, BuscaProfundidade, BuscaProfundidadeIterativa
+
+def test_BuscaLargura():
+    state = VacuumWorld('right', False, False, '')
+    algorithm = BuscaLargura()
+    result = algorithm.search(state)
+    if (result == None):
+      print('Sem solução!')
+    assert result.g != 0  and result.show_path() == " ; clean ; Move Left ; clean"
+
+def test_BuscaProfundidade():
+    state = VacuumWorld('right', False, False, '')
+    algorithm = BuscaProfundidade()
+    result = algorithm.search(state, 10)
+    if (result == None):
+      print('Sem solução!')
+    assert result.g != 0 and result.show_path() == " ; clean ; clean ; clean ; clean ; clean ; clean ; clean ; clean ; Move Left ; clean"
+
+def test_BuscaProfundidadeIterativa():
+    state = VacuumWorld('right', False, False, '')
+    algorithm = BuscaProfundidadeIterativa()
+    result = algorithm.search(state)
+    if (result == None):
+      print('Sem solução!')
+    assert result.g != 0 and result.show_path() == " ; clean ; Move Left ; clean"
 
 def test_BuscaLargura():
     print('\nBusca em Largura')
@@ -87,7 +110,6 @@ def test_none_father_node():
     n = Node(state, None)
     assert (n.depth == 0) and (n.g == 0)
 
-
 def test_BPI_node_parents():
     """
     Testing if BPI is creating only 2 Nodes.
@@ -106,3 +128,4 @@ def test_BPI_node_parents():
     n1 = algorithm.search(state).father_node
     n2 = n1.father_node
     assert n2 == None
+    
