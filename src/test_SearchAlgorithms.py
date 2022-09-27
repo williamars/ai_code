@@ -71,3 +71,38 @@ def testeBuscaProfundidadeIterativa():
         print('Nao achou solucao')
     assert result.g != None and result.g == 3
     print(result.show_path())
+
+def test_none_father_node():
+    """
+    Testing attributes of a none-father Node.
+    Depth and Cost (g) should be 0!
+    """
+    file_map_path = "data/vacuum_simple_0.txt"
+    lin = 0
+    col = 0
+    mapa = convert_file_to_map(file_map_path)
+    print(mapa)
+    state = VacuumWorldGeneric(mapa, lin, col, "")
+    print("State: ", state)
+    n = Node(state, None)
+    assert (n.depth == 0) and (n.g == 0)
+
+
+def test_BPI_node_parents():
+    """
+    Testing if BPI is creating only 2 Nodes.
+    The node n1 should have n2 as a father
+    The node n2 sould have None on fatther_node attribute!
+    """
+    print("\n#### BPI Node Parents ####")
+    file_map_path = "data/vacuum_simple_1.txt"
+    lin = 0
+    col = 0
+    mapa = convert_file_to_map(file_map_path)
+    print(mapa)
+    state = VacuumWorldGeneric(mapa, lin, col, "")
+    algorithm = BuscaProfundidadeIterativa()
+    result = algorithm.search(state)
+    n1 = algorithm.search(state).father_node
+    n2 = n1.father_node
+    assert n2 == None
