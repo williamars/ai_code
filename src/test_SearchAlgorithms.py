@@ -1,3 +1,4 @@
+from aicode.search.Graph import State
 from aicode.search.SearchAlgorithms import *
 from aicode.search.Graph import Node
 from VacuumWorld import *
@@ -6,6 +7,17 @@ from collections import deque
 import logging
 logging.basicConfig(filename='search_algorithms.log', level=logging.DEBUG)
 from aicode.search.SearchAlgorithms import BuscaLargura, BuscaProfundidade, BuscaProfundidadeIterativa
+
+def test_BuscaLargura():
+    state = VacuumWorld('right', False, False, '')
+    algorithm = BuscaLargura()
+    result = algorithm.search(state)
+    if result != None:
+        print('Achou!')
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+    assert result.g != 0
 
 def test_BuscaLargura():
     Map.createArea()
@@ -162,6 +174,10 @@ def testeBuscaProfundidade():
         print(result.show_path())
     else:
         print('Nao achou solucao')
+    assert result.g != 0
+
+def test_BuscaProfundidadeIterativa():
+    state = VacuumWorld('right', False, False, '')
     assert result.g != None and result.g == 300
     print(result.show_path())
 
