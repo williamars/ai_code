@@ -146,7 +146,8 @@ class FourInRow:
         while ((self.endOfGame() == -1) != (self.isBoardFull())):
             k = (int)(not k)
             inicio = datetime.datetime.now()
-            m = self.players[k].move(k+1, self.board)
+            board_copy = self.board.copy()
+            m = self.players[k].move(k+1, board_copy)
             print(f'Jogador {self.players[k].name()} jogou {m}')
             self.movement(k+1, m)
             dur = (datetime.datetime.now() -inicio).total_seconds()
