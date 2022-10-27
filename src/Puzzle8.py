@@ -153,7 +153,6 @@ class Puzzle8(State):
 
 
 def main():
-
     tabuleiro_trivial = [[1,2,3],[8,4,0],[7,6,5]]
     tabuleiro_facil = [[8,1,3],[0,7,2],[6,5,4]]
     tabuleiro_dificil1 = [[7,8,6],[2,3,5],[1,4,0]]
@@ -162,7 +161,7 @@ def main():
     tabuleiro_dificil4 = [[3,1,2],[5,4,8],[0,6,7]]
     tabuleiro_impossivel1 = [[3,4,8],[1,2,5],[7,0,6]]
     tabuleiro_impossivel2 = [[5,4,0],[6,1,8],[7,3,2]]
-    tabuleiro_impossivel3 = [[3,1,2],[5,4,8],[0,7,6]]
+    tabuleiro_impossivel3 = [[1,7,2],[3,9,5],[6,4,8]]
     
     #tabuleiro_impossivel3 = [[5,4,0],[6,1,8],[7,3,2]]
 

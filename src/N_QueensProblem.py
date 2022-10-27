@@ -36,13 +36,13 @@ class N_QueensProblem(State):
                         temp[i][j] = 0
                         temp[i+1][j] = 1
                         sucessores.append(N_QueensProblem(self.size, temp))
-                    #move left
+                    ## move left
                     #if((j - 1) >=0 and self.board[i][j-1] == 0):
                     #    temp = self.board.copy()
                     #    temp[i][j] = 0
                     #    temp[i][j-1] = 1
                     #    sucessores.append(N_QueensProblem(self.size, temp))
-                    #move right
+                    ## move right
                     #if((j + 1) < self.size and self.board[i][j+1] == 0):
                     #    temp = self.board.copy()
                     #    temp[i][j] = 0
@@ -65,8 +65,34 @@ class N_QueensProblem(State):
         pass
     
     def h(self):
-        #TODO
-        pass
+        return self.qtd_lin() + self.qtd_col() + self.qtd_diag() + self.qtd_diag_inv()
+    
+    def qtd_lin(self):
+        qtd = 0
+        for i in range(0,self.size):
+            qtd += np.sum(self.board[i,:]) - 1
+        return qtd
+
+    def qtd_col(self):
+        qtd = 0
+        for i in range(0,self.size):
+            qtd += np.sum(self.board[:,i]) - 1
+        return qtd
+    
+    def qtd_diag(self):
+        # for i, row in enumerate(self.board):
+
+        #     for j, col in enumerate(row):
+        #         if j == i:
+    
+        #         if col == 1:
+        #             if self.qtd_diag_aux(i, j) > 1:
+        #                 return 1
+        return 1
+
+
+    def qtd_diag_inv(self):
+        return 1
 
     def randomState(self):
         self.board = self.generateBoard()
@@ -90,7 +116,8 @@ def main():
     N = int(input("Digite o tamanho do tabuleiro (4-10): "))
     state = N_QueensProblem(size = N, board = None)
     state.randomState()
-    algorithm = SubidaMontanhaEstocastico()
+    algorithm = SubidaMontanha()
+    # algorithm = SubidaMontanhaEstocastico()
     print("Initial state with h = "+str(state.h()))
     start = time.time()
     result = algorithm.search(state)
